@@ -17,13 +17,13 @@
 > per question. Each bullet should be 1-2 sentences max.
 
 - **Why a single shortest-path run from S is not enough:**
-  _Your answer here._
+a single shortest-path run from S is not enough as dijkstras gives us the shortest path one from node to all other nodes. It does not tell us from which relic to pick first, second, etc. It does not give us the order of the relics. 
 
 - **What decision remains after all inter-location costs are known:**
-  _Your answer here._
+  Once we run dijsktras on all nodes to figure out the shortest path any relic to any relic, we still need to know which path allows us to use the cheapest travel fuel. The order still remains unknown after all inter-location costs are known. 
 
 - **Why this requires a search over orders (one sentence):**
-  _Your answer here._
+  This still requires a search over orders as we need to figure out which is the shortest path we can choose among all the paths possible. 
 
 ---
 
