@@ -34,7 +34,11 @@ def explain_problem():
 
     TODO
     """
-    return "TODO"
+    return "1. a single shortest-path run from S is not enough as dijkstras gives us the shortest path one from node to all other nodes. " \
+    "It does not tell us from which relic to pick first, second, etc. It does not give us the order of the relics. " \
+    "2. Once we run dijsktras on all nodes to figure out the shortest path any relic to any relic, we still need to know which path allows us to use the cheapest travel fuel. " \
+    "The order still remains unknown after all inter-location costs are known. " \
+    "3. This still requires a search over orders as we need to figure out which is the shortest path we can choose among all the paths possible. "
 
 
 # =============================================================================
