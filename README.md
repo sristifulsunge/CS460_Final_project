@@ -17,10 +17,10 @@
 > per question. Each bullet should be 1-2 sentences max.
 
 - **Why a single shortest-path run from S is not enough:**
-a single shortest-path run from S is not enough as dijkstras gives us the shortest path one from node to all other nodes. It does not tell us from which relic to pick first, second, etc. It does not give us the order of the relics. 
+  A single shortest-path run from S is not enough as dijkstras gives us the shortest path one from node to all other nodes. It does not tell us from which relic to pick first, second, etc. It does not give us the order of the relics.
 
 - **What decision remains after all inter-location costs are known:**
-  Once we run dijsktras on all nodes to figure out the shortest path any relic to any relic, we still need to know which path allows us to use the cheapest travel fuel. The order still remains unknown after all inter-location costs are known. 
+  Once we run dijsktras on all nodes to figure out the shortest path from any relic to any relic, we still need to know which path allows us to use the cheapest travel fuel. The order still remains unknown after all inter-location costs are known. 
 
 - **Why this requires a search over orders (one sentence):**
   This still requires a search over orders as we need to figure out which is the shortest path we can choose among all the paths possible. 
@@ -35,8 +35,8 @@ a single shortest-path run from S is not enough as dijkstras gives us the shorte
 
 | Source Node Type | Why it is a source |
 |---|---|
-| _node type_ | _one-line reason_ |
-| _node type_ | _one-line reason_ |
+| S | The problem requires us to find the shorted path from the entrance S to all nodes |
+| {R1, R2, ..., Rk} | We are required to find the shiortest path from all relics to each and every relic in order  |
 
 ### Part 2b: Distance Storage
 
@@ -44,20 +44,20 @@ a single shortest-path run from S is not enough as dijkstras gives us the shorte
 
 | Property | Your answer |
 |---|---|
-| Data structure name | |
-| What the keys represent | |
-| What the values represent | |
-| Lookup time complexity | |
-| Why O(1) lookup is possible | |
+| Data structure name | Dictionary |
+| What the keys represent | Source Node(S) or Relics(R1, R2, ..., Rk) |
+| What the values represent | Another dictionary with it's key-value pair representing the destination source with distance|
+| Lookup time complexity | O(1) |
+| Why O(1) lookup is possible | The dictionary here represents a hash map that allows constant time lookup|
 
 ### Part 2c: Precomputation Complexity
 
 > State the total complexity and show the arithmetic. Two to three lines max.
 
-- **Number of Dijkstra runs:** _your answer_
-- **Cost per run:** _your answer_
-- **Total complexity:** _your answer_
-- **Justification (one line):** _your answer_
+- **Number of Dijkstra runs:** K+1
+- **Cost per run:** O(mlogn)
+- **Total complexity:** O((K+1)mlog(n))
+- **Justification (one line):** We run dijkstras on the source node S and for each k relics. 
 
 ---
 
@@ -72,29 +72,30 @@ a single shortest-path run from S is not enough as dijkstras gives us the shorte
 > Do not copy the invariant text from the spec.
 
 - **For nodes already finalized (in S):**
-  _Your answer here._
+  The shortest distances from source to these nodes have been finalised. 
 
 - **For nodes not yet finalized (not in S):**
-  _Your answer here._
+  The current distance stored is the shortest path known so far, but a more optimal path might occur later. 
 
 ### Part 3b: Why Each Phase Holds
 
 > One to two bullets per phase. Maintenance must mention nonnegative edge weights.
 
 - **Initialization : why the invariant holds before iteration 1:**
-  _Your answer here._
+  At the initial step the distance from the soruce to all different points is infinite (or a very large number), as no path is found yet.
+  The distance stored for source is 0. The loop starts correctly. 
 
 - **Maintenance : why finalizing the min-dist node is always correct:**
-  _Your answer here._
+  While running the loop, either the minimum distance has already been found, or the shortest path has not been found yet. The nodes having the smallest distance is finalised as no further shortest path exists in later runs. 
 
 - **Termination : what the invariant guarantees when the algorithm ends:**
-  _Your answer here._
+  All nodes have their correct shortest distance from the source. 
 
 ### Part 3c: Why This Matters for the Route Planner
 
 > One sentence connecting correct distances to correct routing decisions.
 
-_Your answer here._
+The route planner gives us the correct shortest distance, that can be used later to find the order of the relics to find the most efficient path. 
 
 ---
 
