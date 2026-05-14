@@ -60,7 +60,12 @@ def select_sources(spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    sources = [spawn]
+    for relic in relics:
+        if relic not in sources:
+            sources.append(relic)
+    
+    return sources
 
 
 def run_dijkstra(graph, source):
@@ -79,7 +84,26 @@ def run_dijkstra(graph, source):
 
     TODO
     """
-    pass
+    distances = {}
+    for node in graph:
+        distances[node] = float('inf')
+    
+    distances[source] = 0
+    priority_queue = [(0,source)]
+    while priority_queue:
+        current_dist, current_node = heapq.heappop(priority_queue)
+
+        if current_dist > distances[current_node]:
+            continue
+        
+        for neighbour,cost in graph[current_node]:
+            new_dist = current_dist + cost
+
+            if new_dist < distances[neighbour]:
+                distances[neighbour] = new_dist
+                heapq.heappush(priority_queue,(new_dist, neighbour))
+    
+    return distances
 
 
 def precompute_distances(graph, spawn, relics, exit_node):
@@ -99,7 +123,11 @@ def precompute_distances(graph, spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    shortest_dist = {}
+    shortest_dist[spawn] = run_dijkstra(graph, spawn)
+    for relic in relics:
+        shortest_dist[relic] = run_dijkstra(graph, relic)
+
 
 
 # =============================================================================
@@ -116,7 +144,13 @@ def dijkstra_invariant_check():
 
     TODO
     """
-    return "TODO"
+    return "Loop Invarient: " \
+    "For nodes already finalized (in S): The shortest distances from source to these nodes have been finalised." \
+    "For nodes not yet finalized (not in S): The current distance stored is the shortest path known so far, but a more optimal path might occur later." \
+    "Initialization : why the invariant holds before iteration 1: At the initial step the distance from the source to all different points is infinite (or a very large number), as no path is found yet. The distance stored for source is 0. The loop starts correctly." \
+    "Maintenance : why finalizing the min-dist node is always correct: While running the loop, either the minimum distance has already been found, or the shortest path has not been found yet. The nodes having the smallest distance is finalised as no further shortest path exists in later runs." \
+    "Termination : what the invariant guarantees when the algorithm ends: All nodes have their correct shortest distance from the source. The loop ends correctly." \
+    "Why This Matters: The route planner gives us the correct shortest distance, that can be used later to find the order of the relics to find the most efficient path."
 
 
 # =============================================================================
@@ -133,7 +167,15 @@ def explain_search():
 
     TODO
     """
-    return "TODO"
+    return "Why Greedy Fails: " \
+    "The failure mode: Greedy always picks the shortest distance locally, but this could lead to a hiugher total cost. However, there could be a better, more optimal path in later steps." \
+    "Counter-example setup: S --> B (cost = 1), B --> c (cost = 100). This increases the total cost, instead while going from C to B only costs 1. This shows that some paths are cheap in one direction but very expensive in another." \
+    "What greedy picks: The shortest path known locally, i.e. from S to B" \
+    "What optimal picks: Could pick S to C that could lead to a cheaper overall cost." \
+    "Why greedy loses: Choosing the closest relic first could lead to future expensive paths, while a slightly more expensive path at the first step could lead to a more cheaper path." \
+    "What the Algorithm Must Explore: " \
+    "The algorithm must explore all possible different combinations/orders to evaluate the minimum cost path that explores all relics from a given starting positon to end position."
+
 
 
 # =============================================================================
