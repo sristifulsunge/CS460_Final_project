@@ -82,14 +82,14 @@
 > One to two bullets per phase. Maintenance must mention nonnegative edge weights.
 
 - **Initialization : why the invariant holds before iteration 1:**
-  At the initial step the distance from the soruce to all different points is infinite (or a very large number), as no path is found yet.
+  At the initial step the distance from the source to all different points is infinite (or a very large number), as no path is found yet.
   The distance stored for source is 0. The loop starts correctly. 
 
 - **Maintenance : why finalizing the min-dist node is always correct:**
   While running the loop, either the minimum distance has already been found, or the shortest path has not been found yet. The nodes having the smallest distance is finalised as no further shortest path exists in later runs. 
 
 - **Termination : what the invariant guarantees when the algorithm ends:**
-  All nodes have their correct shortest distance from the source. 
+  All nodes have their correct shortest distance from the source. The loop ends correctly.
 
 ### Part 3c: Why This Matters for the Route Planner
 
@@ -106,17 +106,17 @@ The route planner gives us the correct shortest distance, that can be used later
 > State the failure mode. Then give a concrete counter-example using specific node names
 > or costs (you may use the illustration example from the spec). Three to five bullets.
 
-- **The failure mode:** _Your answer here._
-- **Counter-example setup:** _Your answer here._
-- **What greedy picks:** _Your answer here._
-- **What optimal picks:** _Your answer here._
-- **Why greedy loses:** _Your answer here._
+- **The failure mode:** Greedy always picks the shortest distance locally, but this could lead to a hiugher total cost. However, there could be a better, more optimal path in later steps. 
+- **Counter-example setup:** S --> B (cost = 1), B --> c (cost = 100). This increases the total cost, instead while going from C to B only costs 1. This shows that some paths are cheap in one direction but very expensive in another.
+- **What greedy picks:** The shortest path known locally, i.e. from S to B 
+- **What optimal picks:** Could pick S to C that could lead to a cheaper overall cost. 
+- **Why greedy loses:** Choosing the closest relic first could lead to future expensive paths, while a slightly more expensive path at the first step could lead to a more cheaper path. 
 
 ### What the Algorithm Must Explore
 
 > One bullet. Must use the word "order."
 
-- _Your answer here._
+- The algorithm must explore all possible different combinations/orders to evaluate the minimum cost path that explores all relics from a given starting positon to end position.
 
 ---
 
@@ -129,9 +129,9 @@ The route planner gives us the correct shortest distance, that can be used later
 
 | Component | Variable name in code | Data type | Description |
 |---|---|---|---|
-| Current location | | | |
-| Relics already collected | | | |
-| Fuel cost so far | | | |
+| Current location | current_location| string| The node where the Torchbearer is at|
+| Relics already collected | relics_collected| Set| The relics that have alreayd been visited|
+| Fuel cost so far |total_fuel |int | The total fuel cost accumalted so far|
 
 ### Part 5b: Data Structure for Visited Relics
 
@@ -139,18 +139,18 @@ The route planner gives us the correct shortest distance, that can be used later
 
 | Property | Your answer |
 |---|---|
-| Data structure chosen | |
-| Operation: check if relic already collected | Time complexity: |
-| Operation: mark a relic as collected | Time complexity: |
-| Operation: unmark a relic (backtrack) | Time complexity: |
-| Why this structure fits | |
+| Data structure chosen | Set |
+| Operation: check if relic already collected | Time complexity: O(1) |
+| Operation: mark a relic as collected | Time complexity: O(1) |
+| Operation: unmark a relic (backtrack) | Time complexity: O(1) |
+| Why this structure fits | A set allows us to easy add, remove and checks relics during backtracking|
 
 ### Part 5c: Worst-Case Search Space
 
 > Two bullets.
 
-- **Worst-case number of orders considered:** _Your answer (in terms of k)._
-- **Why:** _One-line justification._
+- **Worst-case number of orders considered:** k!
+- **Why:** It evalautes every single possible order of combinations for k relics.
 
 ---
 
@@ -160,23 +160,23 @@ The route planner gives us the correct shortest distance, that can be used later
 
 > Three bullets.
 
-- **What is tracked:** _Your answer here._
-- **When it is used:** _Your answer here._
-- **What it allows the algorithm to skip:** _Your answer here._
+- **What is tracked:** The best total fuel accumalated so far for a complete route starting from S, through all relics, to T.
+- **When it is used:** It is used during the recurssive step when the current path cost is compared to the best route already found.
+- **What it allows the algorithm to skip:** It allows the algorithm to skip when any path computed is more expensive than the best complete route.  
 
 ### Part 6b: Lower Bound Estimation
 
 > Three bullets.
 
-- **What information is available at the current state:** _Your answer here._
-- **What the lower bound accounts for:** _Your answer here._
-- **Why it never overestimates:** _Your answer here._
+- **What information is available at the current state:** The algorithm knows the current location , relics visited and unvisited so far and the total fuel cost. 
+- **What the lower bound accounts for:** The lower bound accounts for the minimum extra fuel still needed to visit all the relics and still reach the end. 
+- **Why it never overestimates:** We take the cheapest path possible, so our estimate is always lower or equal to the actual cost.
 
 ### Part 6c: Pruning Correctness
 
 > One to two bullets. Explain why pruning is safe.
 
-- _Your answer here._
+- This way we are evaluating all the paths possible that include all relic, and discard those whose current cost plus remaining cost is more than the minimum fuel evalauted so far. 
 
 ---
 
