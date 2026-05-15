@@ -128,6 +128,7 @@ def precompute_distances(graph, spawn, relics, exit_node):
     for relic in relics:
         shortest_dist[relic] = run_dijkstra(graph, relic)
 
+    return shortest_dist
 
 # =============================================================================
 # PART 3
