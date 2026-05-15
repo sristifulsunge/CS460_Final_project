@@ -177,8 +177,6 @@ def explain_search():
     "What the Algorithm Must Explore: " \
     "The algorithm must explore all possible different combinations/orders to evaluate the minimum cost path that explores all relics from a given starting positon to end position."
 
-
-
 # =============================================================================
 # PARTS 5 + 6
 # =============================================================================
@@ -262,7 +260,7 @@ def _explore(dist_table, current_loc, relics_remaining, relics_collected,
         total_cost = exit_cost + cost_so_far
         if total_cost <= best[0]:
             best[0] = total_cost
-            best[1] = relics_collected
+            best[1] = relics_collected.copy()
             return 
 
     #recurrsive case 
