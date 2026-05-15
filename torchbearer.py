@@ -129,7 +129,6 @@ def precompute_distances(graph, spawn, relics, exit_node):
         shortest_dist[relic] = run_dijkstra(graph, relic)
 
 
-
 # =============================================================================
 # PART 3
 # =============================================================================
@@ -169,7 +168,8 @@ def explain_search():
     """
     return "Why Greedy Fails: " \
     "The failure mode: Greedy always picks the shortest distance locally, but this could lead to a hiugher total cost. However, there could be a better, more optimal path in later steps." \
-    "Counter-example setup: S --> B (cost = 1), B --> c (cost = 100). This increases the total cost, instead while going from C to B only costs 1. This shows that some paths are cheap in one direction but very expensive in another." \
+    "Counter-example setup: Taking another graph as an example S-->A (cost = 1), S --> B(cost 2), A-->B (cost 100), A-->T(cost 1), B-->A(cost 1), B-->T(Cost 1). Greedy always picks the locally most optimal path." \
+    "Greedy picks S-->A-->B-->T and gives us a total cost of 102, while we could pick S-->B-->A-->T giving us a total cost of 4. " \
     "What greedy picks: The shortest path known locally, i.e. from S to B" \
     "What optimal picks: Could pick S to C that could lead to a cheaper overall cost." \
     "Why greedy loses: Choosing the closest relic first could lead to future expensive paths, while a slightly more expensive path at the first step could lead to a more cheaper path." \
@@ -202,10 +202,17 @@ def find_optimal_route(dist_table, spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    remaining_relics = set(relics)
+    relics_collected = []
+    cost_so_far = 0
+
+    best =[float('inf'), []]
+
+    _explore(dist_table, spawn, remaining_relics, relics_collected, cost_so_far, exit_node, best)
+    return  best[0], best[1]
 
 
-def _explore(dist_table, current_loc, relics_remaining, relics_visited_order,
+def _explore(dist_table, current_loc, relics_remaining, relics_collected,
              cost_so_far, exit_node, best):
     """
     Recursive helper for find_optimal_route.
@@ -234,7 +241,43 @@ def _explore(dist_table, current_loc, relics_remaining, relics_visited_order,
     explaining why it is safe (cannot skip the optimal solution).
     This comment is graded.
     """
-    pass
+
+    #Pruning 
+    #It allows the algorithm to skip when any path computed is more expensive than 
+    #the best complete route. This way we are evaluating all the paths possible that 
+    #include all relic, and discard those whose current cost plus remaining cost is
+    #more than the minimum fuel evalauted so far. 
+
+    if cost_so_far >= best[0]:
+        return 
+    
+    #base case
+    if not relics_remaining:
+
+        exit_cost = dist_table[current_loc][exit_node]
+        if exit_cost == float('inf'):
+            return
+        
+        total_cost = exit_cost + cost_so_far
+        if total_cost <= best[0]:
+            best[0] = total_cost
+            best[1] = relics_collected
+            return 
+
+    #recurrsive case 
+    for relic in list(relics_remaining):
+        travel_cost = dist_table[current_loc][relic]
+
+        if travel_cost == float('inf'):
+            continue
+        
+        relics_remaining.remove(relic)
+        relics_collected.append(relic)
+
+        _explore(dist_table,relic,relics_remaining,relics_collected,cost_so_far + travel_cost, exit_node, best)
+
+        relics_collected.pop()
+        relics_remaining.add(relic)
 
 
 # =============================================================================
@@ -258,7 +301,9 @@ def solve(graph, spawn, relics, exit_node):
 
     TODO
     """
-    pass
+    dist_table = precompute_distances(graph, spawn, relics, exit_node)
+    min_fuel_cost, order_relic = find_optimal_route(dist_table, spawn, relics, exit_node)
+    return min_fuel_cost, order_relic
 
 
 # =============================================================================

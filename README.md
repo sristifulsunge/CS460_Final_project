@@ -36,7 +36,7 @@
 | Source Node Type | Why it is a source |
 |---|---|
 | S | The problem requires us to find the shorted path from the entrance S to all nodes |
-| {R1, R2, ..., Rk} | We are required to find the shiortest path from all relics to each and every relic in order  |
+| {R1, R2, ..., Rk} | We are required to find the shiortest path from all relics to each and every relic in order |
 
 ### Part 2b: Distance Storage
 
@@ -106,8 +106,8 @@ The route planner gives us the correct shortest distance, that can be used later
 > State the failure mode. Then give a concrete counter-example using specific node names
 > or costs (you may use the illustration example from the spec). Three to five bullets.
 
-- **The failure mode:** Greedy always picks the shortest distance locally, but this could lead to a hiugher total cost. However, there could be a better, more optimal path in later steps. 
-- **Counter-example setup:** S --> B (cost = 1), B --> c (cost = 100). This increases the total cost, instead while going from C to B only costs 1. This shows that some paths are cheap in one direction but very expensive in another.
+- **The failure mode:** Greedy always picks the shortest distance locally, but this could lead to a higher total cost. However, there could be a better, more optimal path in later steps. 
+- **Counter-example setup:** Taking another graph as an example S-->A (cost = 1), S --> B(cost 2), A-->B (cost 100), A-->T(cost 1), B-->A(cost 1), B-->T(Cost 1). Greedy always picks the locally most optimal path. Greedy picks S-->A-->B-->T and gives us a total cost of 102, while we could pick S-->B-->A-->T giving us a total cost of 4. 
 - **What greedy picks:** The shortest path known locally, i.e. from S to B 
 - **What optimal picks:** Could pick S to C that could lead to a cheaper overall cost. 
 - **Why greedy loses:** Choosing the closest relic first could lead to future expensive paths, while a slightly more expensive path at the first step could lead to a more cheaper path. 
@@ -129,9 +129,9 @@ The route planner gives us the correct shortest distance, that can be used later
 
 | Component | Variable name in code | Data type | Description |
 |---|---|---|---|
-| Current location | current_location| string| The node where the Torchbearer is at|
-| Relics already collected | relics_collected| Set| The relics that have alreayd been visited|
-| Fuel cost so far |total_fuel |int | The total fuel cost accumalted so far|
+| Current location | current_loc| string| The node where the Torchbearer is at|
+| Relics already collected | relics_collected| Set| The relics that have already been visited|
+| Fuel cost so far |cost_so_far |int | The total fuel cost accumalted so far|
 
 ### Part 5b: Data Structure for Visited Relics
 
