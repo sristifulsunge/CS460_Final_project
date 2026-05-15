@@ -4,17 +4,9 @@
 **Student ID:** 130490344
 **Course:** CS 460 – Algorithms | Spring 2026
 
-> This README is your project documentation. Write it the way a developer would document
-> their design decisions , bullet points, brief justifications, and concrete examples where
-> required. You are not writing an essay. You are explaining what you built and why you built
-> it that way. Delete all blockquotes like this one before submitting.
-
 ---
 
 ## Part 1: Problem Analysis
-
-> Document why this problem is not just a shortest-path problem. Three bullet points, one
-> per question. Each bullet should be 1-2 sentences max.
 
 - **Why a single shortest-path run from S is not enough:**
   A single shortest-path run from S is not enough as dijkstras gives us the shortest path one from node to all other nodes. It does not tell us from which relic to pick first, second, etc. It does not give us the order of the relics.
@@ -31,8 +23,6 @@
 
 ### Part 2a: Source Selection
 
-> List the source node types as a bullet list. For each, one-line reason.
-
 | Source Node Type | Why it is a source |
 |---|---|
 | S | The problem requires us to find the shorted path from the entrance S to all nodes |
@@ -40,7 +30,6 @@
 
 ### Part 2b: Distance Storage
 
-> Fill in the table. No prose required.
 
 | Property | Your answer |
 |---|---|
@@ -52,7 +41,6 @@
 
 ### Part 2c: Precomputation Complexity
 
-> State the total complexity and show the arithmetic. Two to three lines max.
 
 - **Number of Dijkstra runs:** K+1
 - **Cost per run:** O(mlogn)
@@ -63,13 +51,7 @@
 
 ## Part 3: Algorithm Correctness
 
-> Document your understanding of why Dijkstra produces correct distances.
-> Bullet points and short sentences throughout. No paragraphs.
-
 ### Part 3a: What the Invariant Means
-
-> Two bullets: one for finalized nodes, one for non-finalized nodes.
-> Do not copy the invariant text from the spec.
 
 - **For nodes already finalized (in S):**
   The shortest distances from source to these nodes have been finalised. 
@@ -78,8 +60,6 @@
   The current distance stored is the shortest path known so far, but a more optimal path might occur later. 
 
 ### Part 3b: Why Each Phase Holds
-
-> One to two bullets per phase. Maintenance must mention nonnegative edge weights.
 
 - **Initialization : why the invariant holds before iteration 1:**
   At the initial step the distance from the source to all different points is infinite (or a very large number), as no path is found yet.
@@ -93,8 +73,6 @@
 
 ### Part 3c: Why This Matters for the Route Planner
 
-> One sentence connecting correct distances to correct routing decisions.
-
 The route planner gives us the correct shortest distance, that can be used later to find the order of the relics to find the most efficient path. 
 
 ---
@@ -102,9 +80,6 @@ The route planner gives us the correct shortest distance, that can be used later
 ## Part 4: Search Design
 
 ### Why Greedy Fails
-
-> State the failure mode. Then give a concrete counter-example using specific node names
-> or costs (you may use the illustration example from the spec). Three to five bullets.
 
 - **The failure mode:** Greedy always picks the shortest distance locally, but this could lead to a higher total cost. However, there could be a better, more optimal path in later steps. 
 - **Counter-example setup:** Taking another graph as an example S-->A (cost = 1), S --> B(cost 2), A-->B (cost 100), A-->T(cost 1), B-->A(cost 1), B-->T(Cost 1). Greedy always picks the locally most optimal path. Greedy picks S-->A-->B-->T and gives us a total cost of 102, while we could pick S-->B-->A-->T giving us a total cost of 4. 
@@ -114,8 +89,6 @@ The route planner gives us the correct shortest distance, that can be used later
 
 ### What the Algorithm Must Explore
 
-> One bullet. Must use the word "order."
-
 - The algorithm must explore all possible different combinations/orders to evaluate the minimum cost path that explores all relics from a given starting positon to end position.
 
 ---
@@ -124,18 +97,13 @@ The route planner gives us the correct shortest distance, that can be used later
 
 ### Part 5a: State Representation
 
-> Document the three components of your search state as a table.
-> Variable names here must match exactly what you use in torchbearer.py.
-
 | Component | Variable name in code | Data type | Description |
 |---|---|---|---|
-| Current location | current_loc| string| The node where the Torchbearer is at|
+| Current location | current_loc| charectar| The node where the Torchbearer is at|
 | Relics already collected | relics_collected| Set| The relics that have already been visited|
 | Fuel cost so far |cost_so_far |int | The total fuel cost accumalted so far|
 
 ### Part 5b: Data Structure for Visited Relics
-
-> Fill in the table.
 
 | Property | Your answer |
 |---|---|
@@ -143,11 +111,9 @@ The route planner gives us the correct shortest distance, that can be used later
 | Operation: check if relic already collected | Time complexity: O(1) |
 | Operation: mark a relic as collected | Time complexity: O(1) |
 | Operation: unmark a relic (backtrack) | Time complexity: O(1) |
-| Why this structure fits | A set allows us to easy add, remove and checks relics during backtracking|
+| Why this structure fits | A set allows us to easy add, remove and checks relics during backtracking. Sets in python are implemented using hashmaps, which is why the time complexity is O(1)|
 
 ### Part 5c: Worst-Case Search Space
-
-> Two bullets.
 
 - **Worst-case number of orders considered:** k!
 - **Why:** It evalautes every single possible order of combinations for k relics.
@@ -158,15 +124,11 @@ The route planner gives us the correct shortest distance, that can be used later
 
 ### Part 6a: Best-So-Far Tracking
 
-> Three bullets.
-
 - **What is tracked:** The best total fuel accumalated so far for a complete route starting from S, through all relics, to T.
 - **When it is used:** It is used during the recurssive step when the current path cost is compared to the best route already found.
 - **What it allows the algorithm to skip:** It allows the algorithm to skip when any path computed is more expensive than the best complete route.  
 
 ### Part 6b: Lower Bound Estimation
-
-> Three bullets.
 
 - **What information is available at the current state:** The algorithm knows the current location , relics visited and unvisited so far and the total fuel cost. 
 - **What the lower bound accounts for:** The lower bound accounts for the minimum extra fuel still needed to visit all the relics and still reach the end. 
@@ -174,14 +136,10 @@ The route planner gives us the correct shortest distance, that can be used later
 
 ### Part 6c: Pruning Correctness
 
-> One to two bullets. Explain why pruning is safe.
-
 - This way we are evaluating all the paths possible that include all relic, and discard those whose current cost plus remaining cost is more than the minimum fuel evalauted so far. 
 
 ---
 
 ## References
 
-> Bullet list. If none beyond lecture notes, write that.
-
-- _Your references here._
+- lecture notes
